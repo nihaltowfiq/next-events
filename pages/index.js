@@ -1,8 +1,12 @@
+import { Fragment } from 'react';
 import Head from 'next/head';
+import { getAllEvents } from '../dummy-data';
+import EventList from '../components/Events/EventList';
 
 export default function Home() {
+    const allEvents = getAllEvents();
     return (
-        <div>
+        <Fragment>
             <Head>
                 <title>NextEvents - Home</title>
                 <meta
@@ -11,7 +15,7 @@ export default function Home() {
                 />
             </Head>
 
-            <div>Lets Start</div>
-        </div>
+            <EventList items={allEvents} />
+        </Fragment>
     );
 }

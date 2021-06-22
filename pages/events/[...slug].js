@@ -1,5 +1,9 @@
+import { Fragment } from 'react';
 import { useRouter } from 'next/router';
 import { getFilteredEvents } from '../../dummy-data';
+import EventList from '../../components/Events/EventList';
+import ResultsTitle from '../../components/Events/ResultsTitle';
+import ErrorAlert from '../../components/Events/ErrorAlert';
 
 const FilteredEvent = () => {
     const router = useRouter();
@@ -7,9 +11,17 @@ const FilteredEvent = () => {
         query: { slug },
     } = router;
     if (!slug) {
-        return <p className="center">Loading...</p>;
+        return (
+            <Fragment>
+                <ErrorAlert>
+                    <p className="center">Loading...</p>
+                </ErrorAlert>
+                <div className="center">
+                    <Button link="/events">Show All Events</Button>
+                </div>
+            </Fragment>
+        );
     }
-    console.log(slug);
     const filteredMonth = parseInt(slug[0]);
     const filteredYear = parseInt(slug[1]);
 
@@ -22,9 +34,16 @@ const FilteredEvent = () => {
         filteredYear < 2021
     ) {
         return (
-            <p className="center">
-                Invalid filter, please adjust your filter values!
-            </p>
+            <Fragment>
+                <ErrorAlert>
+                    <p className="center">
+                        Invalid filter, please adjust your filter values!
+                    </p>
+                </ErrorAlert>
+                <div className="center">
+                    <Button link="/events">Show All Events</Button>
+                </div>
+            </Fragment>
         );
     }
 
@@ -33,12 +52,13 @@ const FilteredEvent = () => {
         year: filteredYear,
     });
 
-    console.log(filteredEvents);
+    const date = new Date(filteredYear, filteredMonth - 1);
 
     return (
-        <div>
-            <h1>This is Filtered Event!</h1>
-        </div>
+        <Fragment>
+            <ResultsTitle date={date} />
+            <EventList items={filteredEvents} />
+        </Fragment>
     );
 };
 

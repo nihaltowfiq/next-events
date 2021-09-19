@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { Fragment } from 'react';
 import EventList from '../components/Events/EventList';
+import { getAllEvents } from '../helpers';
 
 function Home({ allEvents }) {
 	return (
@@ -16,16 +17,7 @@ function Home({ allEvents }) {
 }
 
 export const getStaticProps = async () => {
-	const response = await fetch('https://database-for-projects-f2951-default-rtdb.firebaseio.com/events.json');
-	const data = await response.json();
-
-	let events = [];
-	for (let [key, value] of Object.entries(data)) {
-		events.push({
-			id: key,
-			...value,
-		});
-	}
+	const events = await getAllEvents();
 
 	return {
 		props: {

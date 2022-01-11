@@ -12,3 +12,8 @@ export const getAllEvents = async () => {
 
 	return events;
 };
+
+export const getEventById = async (id) => {
+	const events = await getAllEvents();
+	return events.find((el) => el.id === id);
+};

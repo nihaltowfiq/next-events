@@ -13,6 +13,11 @@ export const getAllEvents = async () => {
 	return events;
 };
 
+export function getFeaturedEvents() {
+	const events = await getAllEvents();
+	return events.filter((event) => event.isFeatured);
+}
+
 export const getEventById = async (id) => {
 	const events = await getAllEvents();
 	return events.find((el) => el.id === id);

@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import { Fragment } from 'react';
 import EventList from '../components/Events/EventList';
-import { getAllEvents } from '../helpers';
 
 function Home({ allEvents }) {
 	return (
@@ -17,7 +16,7 @@ function Home({ allEvents }) {
 }
 
 export const getStaticProps = async () => {
-	const events = await getAllEvents();
+	const events = await getFeaturedEvents();
 
 	return {
 		props: {

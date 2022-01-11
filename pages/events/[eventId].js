@@ -3,30 +3,28 @@ import ErrorAlert from '../../components/Events/ErrorAlert';
 import EventContent from '../../components/Events/EventDetails/EventContent';
 import EventLogistics from '../../components/Events/EventDetails/EventLogistics';
 import EventSummary from '../../components/Events/EventDetails/EventSummary';
-import { getAllEvents, getEventById } from '../../helpers';
+import { getEventById, getFeaturedEvents } from '../../helpers';
 
-const EventDetail = ({ event }) => {
-	// const router = useRouter();
-	// const event = getEventById(router.query.eventId);
+const EventDetail = ({ data }) => {
+	if (data) {
+		const { title, date, location, image, description } = data;
+		const logisticsProps = { date, address: location, image, imageAlt: title };
 
-	if (!event) {
 		return (
-			<ErrorAlert>
-				<p>No Event Found!</p>
-			</ErrorAlert>
+			<Fragment>
+				<EventSummary title={title} />
+				<EventLogistics {...logisticsProps} />
+				<EventContent>
+					<p>{description}</p>
+				</EventContent>
+			</Fragment>
 		);
 	}
-	const { title, date, location, image, description } = event;
-	const logisticsProps = { date, address: location, image, imageAlt: title };
 
 	return (
-		<Fragment>
-			<EventSummary title={title} />
-			<EventLogistics {...logisticsProps} />
-			<EventContent>
-				<p>{description}</p>
-			</EventContent>
-		</Fragment>
+		<ErrorAlert>
+			<p>Loading...!</p>
+		</ErrorAlert>
 	);
 };
 
@@ -34,24 +32,16 @@ export const getStaticProps = async (ctx) => {
 	const {
 		params: { eventId },
 	} = ctx;
-	console.log(ctx);
 	const data = await getEventById(eventId);
 
-	return {
-		props: {
-			event: data,
-		},
-	};
+	return { props: { data } };
 };
 
 export const getStaticPaths = async () => {
-	const events = await getAllEvents();
+	const events = await getFeaturedEvents();
 	const paths = events.map((el) => ({ params: { eventId: el.id } }));
 
-	return {
-		paths,
-		fallback: false,
-	};
+	return { paths, fallback: 'blocking' };
 };
 
 export default EventDetail;

@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { Fragment } from 'react';
 import EventList from '../components/Events/EventList';
+import { getFeaturedEvents } from '../helpers';
 
 function Home({ allEvents }) {
 	return (

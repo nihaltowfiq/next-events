@@ -34,7 +34,7 @@ export const getStaticProps = async (ctx) => {
 	} = ctx;
 	const data = await getEventById(eventId);
 
-	return { props: { data } };
+	return { props: { data }, revalidate: 1800 };
 };
 
 export const getStaticPaths = async () => {
